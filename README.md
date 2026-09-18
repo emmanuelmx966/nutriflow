@@ -1,265 +1,192 @@
-# NutriFlow — Secure Nutrition Tracking PWA
+# NutriFlow
 
-A secure, reliable, functional Progressive Web App combining the best features of **FatSecret** and **MyFitnessPal**: calorie tracking, macro management, exercise logging, intermittent fasting, meal planning, AI photo food recognition, social recipes, gamification, and more.
+> A privacy-first, offline-ready nutrition tracking PWA — calories, macros, weight, water, fasting, and exercise in one place.
 
-## ✨ Features
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma)](https://www.prisma.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-### Core Nutrition Tracking
-- **Food Diary** — 85+ seeded foods, custom foods, barcode scanner (camera + manual), AI photo recognition (VLM-powered)
-- **Calorie & Macro Tracking** — Mifflin-St Jeor BMR, TDEE calculation, auto-generated goals
-- **Exercise Logging** — MET-based calorie burn calculation, 27 seeded exercises
-- **Weight Tracking** — Progress charts, goal predictions (linear regression)
-- **Water Intake** — Daily tracking with quick-add buttons
-- **Intermittent Fasting** — 16:8, 18:6, 20:4, 24h protocols with live timer
+---
 
-### Smart Features
-- **AI Meal Photo Recognition** — Snap a photo, AI identifies foods + estimates calories/macros
-- **Macro-Based Recommendations** — Suggests recipes + foods to fill remaining macro gaps
-- **Smart Nutrition Tips** — Contextual advice based on today's data
-- **Food Search Autocomplete** — Instant suggestions with 1-tap logging
-- **Quick Add** — Recent foods + favorites with star/unstar management
+## About
 
-### Meal Planning
-- **Weekly Meal Plan** — 7×4 grid, auto-plan, manual assignment
-- **Meal Plan Templates** — 6 curated templates (Balanced, High Protein, Mediterranean, Low Carb, Plant Forward, Performance)
-- **Grocery List** — Auto-generated from meal plan ingredients with interactive checkboxes
+NutriFlow is a Progressive Web App for tracking nutrition and health metrics. Built with a focus on **privacy**, **offline-readiness**, and **clean architecture** (SOLID principles).
 
-### Social & Community
-- **Recipe Builder** — Create custom recipes with ingredients, share publicly
-- **Recipe Likes** — Like/unlike community recipes
-- **Recipe Ratings** — 1-5 star ratings with average computation
-- **Recipe Comments** — Comment on community recipes
-- **Community Leaderboard** — Compare nutrition scores with other users
+**Originally built as a personal tool** for tracking daily meals, calories, and health metrics for a specific user. Now open-sourced as a portfolio project and a foundation for a bilingual (Spanish/English) personal edition.
 
-### Gamification
-- **Nutrition Score** — Composite 0-100 score (macro adherence, variety, consistency, hydration) with A-F grade
-- **Score History Chart** — Track score over time (7/14/30 days)
-- **12 Milestones** — Score thresholds, streaks, perfect days, logging consistency
-- **9 Achievements** — First Steps, On a Roll, Week Warrior, Monthly Master, etc.
-- **Streak Tracking** — Current + longest streak with day-segment visualization
-- **Milestone Notifications** — Celebratory toast when unlocking new milestones
+### Core Features
 
-### Analytics
-- **Per-Meal Macro Targets** — 30/40/25/5 calorie distribution across meals
-- **Macro Breakdown Chart** — Donut chart showing % of calories from protein/carbs/fat
-- **Weekly Summary** — 7-day averages with week-over-week trend
-- **Goal Predictions** — "At this rate, you'll reach your goal in X days" with confidence level
-- **Insights Dashboard** — Streaks, achievements, milestones, leaderboard
+- 🍽️ **Food diary** — log meals by search, barcode, or custom entries
+- 📊 **Macro tracking** — calories, protein, carbs, fat with goal adherence
+- ⚖️ **Weight tracking** — trend charts + goal achievement predictions (linear regression)
+- 💧 **Water intake** — daily goal tracking with quick-add buttons
+- ⏱️ **Intermittent fasting** — 16:8, 18:6, 20:4, 24h protocols with live timer
+- 🏋️ **Exercise log** — calories burned via MET calculation, 27 seeded exercises
+- 📅 **Meal planning** — weekly 7×4 grid + grocery list generation
+- 🍳 **Recipes** — create reusable recipes from ingredients
+- 🎯 **Goal predictions** — "at this rate, you'll hit your goal in X days"
+- 🏆 **Milestones & achievements** — motivational progress tracking
+- 📈 **Nutrition score** — composite metric (macro adherence, variety, consistency, hydration)
+- 📄 **Reports** — PDF + CSV export by date range *(in progress)*
+- 🔒 **Privacy-first** — credentials auth, no third-party tracking
+- 📱 **PWA** — installable on iOS and Android, works offline
 
-### Security & PWA
-- **Secure Auth** — NextAuth v4 with bcrypt (cost 12), JWT HTTP-only cookies, rate limiting
-- **Input Validation** — Zod schemas on every API endpoint
-- **PWA** — Installable manifest, service worker (offline shell caching), safe-area support
-- **Data Portability** — Export (JSON/CSV) + Import (JSON)
+### Project Status
 
-## 🛠 Tech Stack
+**Phase 1 of 6 complete.**
+
+- ✅ UI reorganized into single-responsibility folders
+- ✅ 5-tab navigation: Hoy | Diario | Progreso | Plan | Reportes
+- ✅ Migrated from SQLite to Postgres (Neon)
+- ⏳ Phase 2 in progress: barcode hybrid lookup + iOS camera support
+
+See [docs/ROADMAP.md](docs/ROADMAP.md) for the full development plan.
+
+---
+
+## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+|---|---|
 | Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript 5 |
-| Database | Prisma ORM + SQLite |
-| Auth | NextAuth.js v4 |
-| Styling | Tailwind CSS 4 + shadcn/ui (New York) |
-| State | Zustand + TanStack Query |
+| UI | React 19, TailwindCSS 4, Radix UI, Lucide |
+| State | Zustand (app state), TanStack Query (server state) |
+| Forms | React Hook Form + Zod |
 | Charts | Recharts |
-| AI | z-ai-web-dev-sdk (VLM glm-4.6v) |
-| Icons | Lucide React |
-| Passwords | bcryptjs (cost factor 12) |
+| Database | Postgres (Neon) + Prisma 6 |
+| Auth | NextAuth.js v4 (credentials + JWT) |
+| Hashing | bcrypt (cost 12) |
+| Runtime | Bun (dev) / Node 20+ (prod) |
+| Deploy | Vercel |
 
-## 📁 Project Structure
+---
 
-```
-nutriflow/
-├── prisma/
-│   ├── schema.prisma          # 20+ models (User, Food, FoodLog, Recipe, etc.)
-│   └── seed.ts                # 85 foods + 27 exercises seed data
-├── public/
-│   ├── manifest.json          # PWA manifest
-│   ├── sw.js                  # Service worker
-│   ├── icon-192.svg           # App icons
-│   ├── icon-512.svg
-│   └── favicon.svg
-├── src/
-│   ├── app/
-│   │   ├── api/               # 40+ API routes
-│   │   │   ├── auth/           # NextAuth + register
-│   │   │   ├── foods/          # Search, autocomplete, custom, barcode
-│   │   │   ├── diary/          # Food log CRUD
-│   │   │   ├── exercise/       # Exercise log CRUD
-│   │   │   ├── weight/         # Weight tracking
-│   │   │   ├── water/          # Water intake
-│   │   │   ├── goals/          # Goal management
-│   │   │   ├── fasting/        # Intermittent fasting
-│   │   │   ├── stats/          # Dashboard aggregation
-│   │   │   ├── score/          # Nutrition score + history
-│   │   │   ├── insights/        # Streaks, achievements
-│   │   │   ├── milestones/     # Score milestones
-│   │   │   ├── leaderboard/    # Community ranking
-│   │   │   ├── recipes/        # CRUD, likes, ratings, comments
-│   │   │   ├── meal-plan/      # Weekly plan + grocery + templates
-│   │   │   ├── favorites/      # Food favorites
-│   │   │   ├── recommendations/# Macro-based suggestions
-│   │   │   ├── ai/             # AI meal photo analysis
-│   │   │   ├── export/         # JSON/CSV export
-│   │   │   ├── import/         # JSON import
-│   │   │   ├── prediction/    # Goal achievement prediction
-│   │   │   ├── weekly-summary/ # 7-day averages
-│   │   │   └── profile/        # User profile
-│   │   ├── globals.css         # Tailwind + theme + CSS gradients
-│   │   ├── layout.tsx          # Root layout (PWA metadata)
-│   │   └── page.tsx            # Single-page app with view switching
-│   ├── components/
-│   │   ├── app/                # 25+ app components
-│   │   │   ├── views/          # 7 views (dashboard, diary, exercise, etc.)
-│   │   │   ├── auth-screen.tsx
-│   │   │   ├── app-shell.tsx   # Top bar + bottom nav
-│   │   │   ├── barcode-scanner.tsx
-│   │   │   ├── meal-photo-analyzer.tsx
-│   │   │   ├── food-autocomplete.tsx
-│   │   │   ├── quick-add.tsx
-│   │   │   ├── nutrition-score-card.tsx
-│   │   │   ├── milestone-notifier.tsx
-│   │   │   ├── leaderboard-card.tsx
-│   │   │   ├── star-rating.tsx
-│   │   │   └── ...
-│   │   ├── ui/                 # 50+ shadcn/ui components
-│   │   ├── providers.tsx       # Session + Theme + QueryClient
-│   │   └── sw-register.tsx     # Service worker registration
-│   ├── lib/
-│   │   ├── ai/                 # MealVisionService (VLM integration)
-│   │   ├── api/                # Response helpers
-│   │   ├── auth/               # NextAuth config + bcrypt
-│   │   ├── security/           # Rate limiting
-│   │   ├── nutrition/          # BMR/TDEE calculator
-│   │   ├── services/           # 20+ SOLID services
-│   │   ├── validators/         # Zod schemas
-│   │   ├── utils/              # Date helpers
-│   │   ├── api-client.ts       # Typed fetch client
-│   │   └── db.ts               # Prisma client
-│   ├── store/
-│   │   └── app-store.ts        # Zustand store
-│   └── types/
-│       └── next-auth.d.ts      # NextAuth type augmentation
-├── .env.example
-├── .gitignore
-├── package.json
-├── tsconfig.json
-├── next.config.ts
-├── tailwind.config.ts
-├── postcss.config.mjs
-├── eslint.config.mjs
-└── components.json
-```
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ or Bun
-- npm/bun package manager
 
-### Installation
+- **Bun** ≥ 1.1 — [install](https://bun.sh/)
+- **Postgres** database — local or [Neon](https://neon.tech/) free tier
+- **Node.js** ≥ 20 — required for production runtime only
+
+### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/nutriflow.git
+# 1. Clone
+git clone https://github.com/emmanuelmx966/nutriflow.git
 cd nutriflow
 
-# Install dependencies
+# 2. Install dependencies
 bun install
-# or
-npm install
 
-# Copy environment file
+# 3. Configure environment
 cp .env.example .env
+# Then edit .env with:
+#   DATABASE_URL=postgresql://user:pass@host/db?sslmode=require
+#   NEXTAUTH_SECRET=<generate one — see below>
+#   NEXTAUTH_URL=http://localhost:3000
 
-# Generate a NextAuth secret
-openssl rand -hex 32
-# Add it to .env as NEXTAUTH_SECRET=...
+# 4. Apply database schema
+bun prisma migrate dev
 
-# Push database schema
-bun run db:push
-
-# Seed the database (85 foods + 27 exercises)
+# 5. Seed initial data (foods + exercises)
 bun run db:seed
 
-# Start the dev server
+# 6. Start dev server
 bun run dev
-# or
-npm run dev
-```
 
-The app will be available at `http://localhost:3000`.
+Open http://localhost:3000.
 
-### Available Scripts
+Generate NEXTAUTH_SECRET
 
-| Script | Description |
-|--------|-------------|
-| `bun run dev` | Start dev server (port 3000) |
-| `bun run build` | Production build |
-| `bun run start` | Start production server |
-| `bun run lint` | Run ESLint |
-| `bun run db:push` | Push schema to SQLite |
-| `bun run db:seed` | Seed foods + exercises |
-| `bun run db:generate` | Regenerate Prisma client |
-| `bun run db:migrate` | Run migrations |
-| `bun run db:reset` | Reset database |
+bun -e "console.log(crypto.randomUUID() + crypto.randomUUID())"
 
-## 🔐 Security Features
+Copy the result into .env.
 
-- **bcrypt password hashing** (cost factor 12)
-- **JWT sessions** with HTTP-only cookies (30-day expiry)
-- **Rate limiting** — 10 auth attempts / 15 min, 100 API requests / min, 10 AI requests / hour
-- **Zod input validation** on every API endpoint
-- **Timing attack mitigation** — constant-time-ish password verification on login miss
-- **Service worker** never caches auth or user data (API requests go network-first)
-- **No client-side secrets** — all sensitive operations server-side only
+Project Structure
 
-## 📱 PWA Features
+nutriflow/
+├── prisma/
+│   ├── schema.prisma              # Database schema (20+ models)
+│   ├── migrations/                # Versioned migrations
+│   └── seed.ts                    # Initial seed data
+├── public/                        # PWA manifest, icons, service worker
+├── src/
+│   ├── app/                       # Next.js App Router
+│   │   ├── api/                   # ~44 API routes
+│   │   ├── layout.tsx
+│   │   └── page.tsx               # Main view router (6 views)
+│   ├── components/
+│   │   ├── app/
+│   │   │   ├── views/             # Screen-level components
+│   │   │   │   ├── diary/         # Food + exercise (8 files)
+│   │   │   │   ├── progress/      # Weight + achievements (5 files)
+│   │   │   │   ├── plan/          # Meal plan + recipes (10 files)
+│   │   │   │   ├── _hidden/       # Removed from nav, kept for reference
+│   │   │   │   ├── dashboard.tsx
+│   │   │   │   ├── reports.tsx    # Placeholder (Phase 3)
+│   │   │   │   └── profile.tsx
+│   │   │   └── app-shell.tsx      # Nav + layout wrapper
+│   │   └── ui/                    # Radix-based UI primitives
+│   ├── lib/
+│   │   ├── auth/                  # NextAuth config + bcrypt
+│   │   ├── db.ts                  # Prisma client singleton
+│   │   ├── services/              # Business logic (~25 services)
+│   │   ├── nutrition/             # BMR/TDEE calculators
+│   │   ├── security/              # Rate limiting
+│   │   ├── validators/            # Zod schemas
+│   │   └── utils/                 # Date + misc helpers
+│   ├── store/                     # Zustand stores
+│   └── types/                     # Shared TS types
+└── docs/
+    ├── ROADMAP.md                 # 6-phase development plan
+    └── ARCHITECTURE.md            # Technical decisions
 
-- Installable on mobile/desktop (standalone display mode)
-- Offline shell caching via service worker
-- Safe-area insets for iOS notch
-- Apple Web App capable with custom status bar
-- App shortcuts (Dashboard, Food Diary, Add Food)
 
-## 🏗 Architecture (SOLID)
+    See docs/ARCHITECTURE.md for architectural details.
 
-Each service has a **single responsibility**:
-- `AuthService` — registration + goal generation
-- `FoodService` — catalog search + custom foods
-- `DiaryService` — food log CRUD + daily aggregation
-- `ExerciseService` — MET-based calorie calculation
-- `WeightService` — weight history + user sync
-- `WaterService` — daily intake upsert
-- `GoalService` — active goal management
-- `FastingService` — intermittent fasting sessions
-- `StatsService` — dashboard composition
-- `ProfileService` — biometrics + goal regeneration
-- `RecipeService` — recipe CRUD + ingredients
-- `RecipeLikeService` — likes + community browsing
-- `RecipeRatingService` — 1-5 star ratings
-- `RecipeCommentService` — comments
-- `MealPlanService` — weekly plan + grocery list
-- `MealPlanTemplateService` — 6 curated templates
-- `FavoritesService` — food favorites + recent foods
-- `RecommendationsService` — macro-based suggestions
-- `NutritionScoreService` — composite health metric
-- `InsightsService` — streaks + achievements
-- `MilestonesService` — score milestones
-- `LeaderboardService` — community ranking
-- `WeeklySummaryService` — 7-day averages
-- `GoalPredictionService` — linear regression projection
-- `TipsService` — contextual nutrition advice
-- `ImportService` / `ExportService` — data portability
-- `MealVisionService` — VLM food recognition
+Available Scripts
 
-API routes are **thin controllers** that call services.
+bun run dev          # Start dev server (port 3000)
+bun run build        # Production build
+bun run start        # Start production server
+bun run lint         # ESLint
 
-## 📄 License
+bun run db:migrate   # Run Prisma migrations
+bun run db:push      # Push schema without migration (dev only)
+bun run db:reset     # Reset database (destructive)
+bun run db:seed      # Seed initial data
+bun prisma studio    # Open Prisma Studio GUI
 
-MIT — feel free to use this project for your own purposes.
 
-## 🤝 Contributing
+Security
+Passwords hashed with bcrypt (cost factor 12)
 
-This is a demo project. Feel free to fork and customize!
+Sessions via JWT (stateless, HTTP-only cookies, 30-day expiry)
+
+Timing-attack mitigation in login (bcrypt against dummy hash on miss)
+
+Rate limiting on auth endpoints (10 attempts / 15 min)
+
+Zod input validation on every API endpoint
+
+No client-side secrets — all sensitive operations server-side
+
+Service worker never caches auth tokens or user data
+
+.env gitignored — secrets never committed
+
+PWA
+Installable on iOS (Safari → Share → Add to Home Screen) and Android (Chrome → Install app)
+
+Offline shell caching via service worker
+
+Safe-area insets for iOS notch
+
+display: standalone — runs full-screen like a native app
+
+License
+MIT — see LICENSE.
+
