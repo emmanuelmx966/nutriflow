@@ -58,8 +58,10 @@ export class GoalPredictionService {
     }
 
     // Calculate weekly change rate using linear regression on weight logs
-    const dataPoints = weightLogs.slice(-10).map((w) => ({
-      day: Math.floor((w.date.getTime() - weightLogs[0].date.getTime()) / (1000 * 60 * 60 * 24)),
+    const recentLogs = weightLogs.slice(-10);
+    const baseDate = recentLogs[0].date;
+    const dataPoints = recentLogs.map((w) => ({
+      day: Math.floor((w.date.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24)),
       weight: w.weightKg,
     }));
 
@@ -68,7 +70,23 @@ export class GoalPredictionService {
     const sumY = dataPoints.reduce((s, d) => s + d.weight, 0);
     const sumXY = dataPoints.reduce((s, d) => s + d.day * d.weight, 0);
     const sumX2 = dataPoints.reduce((s, d) => s + d.day * d.day, 0);
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX || 1);
+    const denominator = n * sumX2 - sumX * sumX;
+
+    if (Math.abs(denominator) < 1e-10) {
+      return {
+        currentWeightKg,
+        goalWeightKg,
+        goalType,
+        weeklyChangeKg: 0,
+        daysToGoal: null,
+        projectedDate: null,
+        onTrack: false,
+        message: "Not enough variation in your weight logs to make a prediction.",
+        confidence: "low",
+      };
+    }
+
+    const slope = (n * sumXY - sumX * sumY) / denominator;
     const dailyChangeKg = slope;
     const weeklyChangeKg = Math.round(dailyChangeKg * 7 * 100) / 100;
 

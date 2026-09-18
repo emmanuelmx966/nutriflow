@@ -21,6 +21,25 @@ export interface ImportResult {
   errors: string[];
 }
 
+type RawRecord = Record<string, unknown>;
+
+function asRecord(value: unknown): RawRecord | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as RawRecord;
+}
+
+function asString(value: unknown): string | null {
+  return typeof value === "string" ? value : null;
+}
+
+function asNumber(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function asStringOrNull(value: unknown): string | null {
+  return typeof value === "string" ? value : null;
+}
+
 export class ImportService {
   /**
    * Import a JSON bundle into the current user's account.
@@ -43,17 +62,24 @@ export class ImportService {
 
     // Import weight logs (upsert by date)
     if (Array.isArray(bundle.weightLogs)) {
-      for (const w of bundle.weightLogs) {
+      for (const rawItem of bundle.weightLogs) {
         try {
-          if (!w || typeof w.date !== "string" || typeof w.weightKg !== "number") {
+          const w = asRecord(rawItem);
+          if (!w) {
             result.skipped++;
             continue;
           }
-          const date = new Date(w.date);
+          const dateStr = asString(w.date);
+          const weightKg = asNumber(w.weightKg);
+          if (!dateStr || weightKg === null) {
+            result.skipped++;
+            continue;
+          }
+          const date = new Date(dateStr);
           await db.weightLog.upsert({
             where: { userId_date: { userId, date } },
-            create: { userId, date, weightKg: w.weightKg, note: w.note ?? null },
-            update: { weightKg: w.weightKg, note: w.note ?? null },
+            create: { userId, date, weightKg, note: asStringOrNull(w.note) },
+            update: { weightKg, note: asStringOrNull(w.note) },
           });
           result.imported.weightLogs++;
         } catch {
@@ -64,17 +90,24 @@ export class ImportService {
 
     // Import water logs (upsert by date)
     if (Array.isArray(bundle.waterLogs)) {
-      for (const w of bundle.waterLogs) {
+      for (const rawItem of bundle.waterLogs) {
         try {
-          if (!w || typeof w.date !== "string" || typeof w.amountMl !== "number") {
+          const w = asRecord(rawItem);
+          if (!w) {
             result.skipped++;
             continue;
           }
-          const date = new Date(w.date);
+          const dateStr = asString(w.date);
+          const amountMl = asNumber(w.amountMl);
+          if (!dateStr || amountMl === null) {
+            result.skipped++;
+            continue;
+          }
+          const date = new Date(dateStr);
           await db.waterLog.upsert({
             where: { userId_date: { userId, date } },
-            create: { userId, date, amountMl: w.amountMl },
-            update: { amountMl: w.amountMl },
+            create: { userId, date, amountMl },
+            update: { amountMl },
           });
           result.imported.waterLogs++;
         } catch {
@@ -85,27 +118,34 @@ export class ImportService {
 
     // Import food logs (create new, don't deduplicate)
     if (Array.isArray(bundle.foodLogs)) {
-      for (const f of bundle.foodLogs) {
+      for (const rawItem of bundle.foodLogs) {
         try {
-          if (!f || typeof f.date !== "string" || typeof f.calories !== "number") {
+          const f = asRecord(rawItem);
+          if (!f) {
+            result.skipped++;
+            continue;
+          }
+          const dateStr = asString(f.date);
+          const calories = asNumber(f.calories);
+          if (!dateStr || calories === null) {
             result.skipped++;
             continue;
           }
           await db.foodLog.create({
             data: {
               userId,
-              date: new Date(f.date),
-              meal: f.meal ?? "snack",
+              date: new Date(dateStr),
+              meal: asString(f.meal) ?? "snack",
               foodId: null,
               customFoodId: null,
-              foodName: f.foodName ?? "Imported food",
-              quantityG: f.quantityG ?? 100,
-              servings: f.servings ?? 1,
-              calories: f.calories,
-              proteinG: f.proteinG ?? 0,
-              carbsG: f.carbsG ?? 0,
-              fatG: f.fatG ?? 0,
-              fiberG: f.fiberG ?? null,
+              foodName: asString(f.foodName) ?? "Imported food",
+              quantityG: asNumber(f.quantityG) ?? 100,
+              servings: asNumber(f.servings) ?? 1,
+              calories,
+              proteinG: asNumber(f.proteinG) ?? 0,
+              carbsG: asNumber(f.carbsG) ?? 0,
+              fatG: asNumber(f.fatG) ?? 0,
+              fiberG: asNumber(f.fiberG),
             },
           });
           result.imported.foodLogs++;
@@ -117,20 +157,27 @@ export class ImportService {
 
     // Import exercise logs
     if (Array.isArray(bundle.exerciseLogs)) {
-      for (const e of bundle.exerciseLogs) {
+      for (const rawItem of bundle.exerciseLogs) {
         try {
-          if (!e || typeof e.date !== "string" || typeof e.caloriesBurned !== "number") {
+          const e = asRecord(rawItem);
+          if (!e) {
+            result.skipped++;
+            continue;
+          }
+          const dateStr = asString(e.date);
+          const caloriesBurned = asNumber(e.caloriesBurned);
+          if (!dateStr || caloriesBurned === null) {
             result.skipped++;
             continue;
           }
           await db.exerciseLog.create({
             data: {
               userId,
-              date: new Date(e.date),
+              date: new Date(dateStr),
               exerciseId: null,
-              exerciseName: e.exerciseName ?? "Imported exercise",
-              durationMin: e.durationMin ?? 30,
-              caloriesBurned: e.caloriesBurned,
+              exerciseName: asString(e.exerciseName) ?? "Imported exercise",
+              durationMin: asNumber(e.durationMin) ?? 30,
+              caloriesBurned,
             },
           });
           result.imported.exerciseLogs++;
@@ -142,38 +189,47 @@ export class ImportService {
 
     // Import recipes (create new with ingredients)
     if (Array.isArray(bundle.recipes)) {
-      for (const r of bundle.recipes) {
+      for (const rawItem of bundle.recipes) {
         try {
-          if (!r || typeof r.name !== "string") {
+          const r = asRecord(rawItem);
+          if (!r) {
+            result.skipped++;
+            continue;
+          }
+          const name = asString(r.name);
+          if (!name) {
             result.skipped++;
             continue;
           }
           const created = await db.recipe.create({
             data: {
               userId,
-              name: r.name,
-              description: r.description ?? null,
-              servings: r.servings ?? 1,
-              calories: r.calories ?? 0,
-              proteinG: r.proteinG ?? 0,
-              carbsG: r.carbsG ?? 0,
-              fatG: r.fatG ?? 0,
+              name,
+              description: asStringOrNull(r.description),
+              servings: asNumber(r.servings) ?? 1,
+              calories: asNumber(r.calories) ?? 0,
+              proteinG: asNumber(r.proteinG) ?? 0,
+              carbsG: asNumber(r.carbsG) ?? 0,
+              fatG: asNumber(r.fatG) ?? 0,
               isPublic: false, // always private on import
             },
           });
           if (Array.isArray(r.ingredients)) {
-            for (const ing of r.ingredients) {
-              if (!ing || typeof ing.name !== "string") continue;
+            for (const rawIng of r.ingredients) {
+              const ing = asRecord(rawIng);
+              if (!ing) continue;
+              const ingName = asString(ing.name);
+              if (!ingName) continue;
               await db.recipeIngredient.create({
                 data: {
                   recipeId: created.id,
                   foodId: null,
-                  name: ing.name,
-                  quantityG: ing.quantityG ?? 100,
-                  calories: ing.calories ?? 0,
-                  proteinG: ing.proteinG ?? 0,
-                  carbsG: ing.carbsG ?? 0,
-                  fatG: ing.fatG ?? 0,
+                  name: ingName,
+                  quantityG: asNumber(ing.quantityG) ?? 100,
+                  calories: asNumber(ing.calories) ?? 0,
+                  proteinG: asNumber(ing.proteinG) ?? 0,
+                  carbsG: asNumber(ing.carbsG) ?? 0,
+                  fatG: asNumber(ing.fatG) ?? 0,
                 },
               });
             }
@@ -188,8 +244,9 @@ export class ImportService {
     // Import goals (deactivate existing, create new active)
     if (Array.isArray(bundle.goals) && bundle.goals.length > 0) {
       try {
-        const g = bundle.goals[0]; // import only the most recent goal
-        if (g && typeof g.calorieGoal === "number") {
+        const g = asRecord(bundle.goals[0]); // import only the most recent goal
+        const calorieGoal = g ? asNumber(g.calorieGoal) : null;
+        if (g && calorieGoal !== null) {
           await db.goal.updateMany({
             where: { userId, active: true },
             data: { active: false },
@@ -197,12 +254,12 @@ export class ImportService {
           await db.goal.create({
             data: {
               userId,
-              calorieGoal: g.calorieGoal,
-              proteinGoalG: g.proteinGoalG ?? 0,
-              carbGoalG: g.carbGoalG ?? 0,
-              fatGoalG: g.fatGoalG ?? 0,
-              waterGoalMl: g.waterGoalMl ?? 2000,
-              weightGoalKg: g.weightGoalKg ?? null,
+              calorieGoal,
+              proteinGoalG: asNumber(g.proteinGoalG) ?? 0,
+              carbGoalG: asNumber(g.carbGoalG) ?? 0,
+              fatGoalG: asNumber(g.fatGoalG) ?? 0,
+              waterGoalMl: asNumber(g.waterGoalMl) ?? 2000,
+              weightGoalKg: asNumber(g.weightGoalKg),
               active: true,
             },
           });

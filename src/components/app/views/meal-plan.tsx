@@ -49,7 +49,7 @@ export function MealPlanView() {
   });
 
   const autoPlanMutation = useMutation({
-    mutationFn: () => api.post("/api/meal-plan", { action: "auto-plan", week: weekStart }),
+    mutationFn: () => api.post<{ autoPlanned: number }>("/api/meal-plan", { action: "auto-plan", week: weekStart }),
     onSuccess: (data: { autoPlanned: number }) => {
       qc.invalidateQueries({ queryKey: ["meal-plan", weekStart] });
       toast.success(`Auto-planned ${data.autoPlanned} meals`);
@@ -61,7 +61,7 @@ export function MealPlanView() {
   });
 
   const clearMutation = useMutation({
-    mutationFn: () => api.post("/api/meal-plan", { action: "clear", week: weekStart }),
+    mutationFn: () => api.post<{ cleared: number }>("/api/meal-plan", { action: "clear", week: weekStart }),
     onSuccess: (data: { cleared: number }) => {
       qc.invalidateQueries({ queryKey: ["meal-plan", weekStart] });
       toast.success(`Cleared ${data.cleared} meals`);

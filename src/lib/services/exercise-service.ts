@@ -31,7 +31,7 @@ export class ExerciseService {
     const date = new Date(data.date);
 
     let calories = data.caloriesBurned;
-    let exerciseId = data.exerciseId;
+    let exerciseId: string | null | undefined = data.exerciseId;
     if (!calories) {
       // compute from MET if linked exercise, else estimate 6 MET (moderate)
       let met = 6;

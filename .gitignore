@@ -19,17 +19,21 @@ next-env.d.ts
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 
 # Database
 db/
 *.db
 *.db-journal
+*.sqlite
+*.sqlite3
 
 # Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 bun-debug.log*
+*.log
 
 # Logs
 dev.log
@@ -52,3 +56,6 @@ Thumbs.db
 # Misc
 *.pem
 .vercel
+
+# Bun
+.bun/clear

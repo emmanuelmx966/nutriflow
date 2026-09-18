@@ -44,9 +44,11 @@ export class FavoritesService {
     },
   ): Promise<void> {
     if (!params.foodId && !params.customFoodId) return;
+
+    const foodId = params.foodId ?? null;
+    const customFoodId = params.customFoodId ?? null;
+
     try {
-      const foodId = params.foodId ?? null;
-      const customFoodId = params.customFoodId ?? null;
       await db.foodFavorite.upsert({
         where: {
           userId_foodId_customFoodId: {

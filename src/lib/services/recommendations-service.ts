@@ -130,7 +130,8 @@ export class RecommendationsService {
       { macro: "protein", value: remaining.protein },
       { macro: "carbs", value: remaining.carbs },
       { macro: "fat", value: remaining.fat },
-    ].sort((a, b) => b.value - a.value);
+    ];
+    deficits.sort((a, b) => b.value - a.value);
 
     const primary = deficits[0];
     if (primary.value <= 0 && remaining.calories <= 0) return [];

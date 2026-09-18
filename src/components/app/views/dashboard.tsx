@@ -85,6 +85,9 @@ export function DashboardView() {
   const waterGoal = goal?.waterGoalMl ?? 2000;
 
   const consumedCal = consumed?.calories ?? 0;
+  const consumedProtein = consumed?.protein ?? 0;
+  const consumedCarbs = consumed?.carbs ?? 0;
+  const consumedFat = consumed?.fat ?? 0;
   const remainingCal = Math.round(calorieGoal - consumedCal + burned);
   const ringPct = Math.min(1, Math.max(0, consumedCal / calorieGoal));
 
@@ -147,9 +150,9 @@ export function DashboardView() {
           <CardTitle className="text-sm font-semibold">Macros</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 pb-4">
-          <MacroBar label="Protein" value={consumed.protein} goal={proteinGoal} color="bg-rose-500" />
-          <MacroBar label="Carbs" value={consumed.carbs} goal={carbGoal} color="bg-amber-500" />
-          <MacroBar label="Fat" value={consumed.fat} goal={fatGoal} color="bg-violet-500" />
+          <MacroBar label="Protein" value={consumedProtein} goal={proteinGoal} color="bg-rose-500" />
+          <MacroBar label="Carbs" value={consumedCarbs} goal={carbGoal} color="bg-amber-500" />
+          <MacroBar label="Fat" value={consumedFat} goal={fatGoal} color="bg-violet-500" />
         </CardContent>
       </Card>
 

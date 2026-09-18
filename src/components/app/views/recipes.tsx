@@ -504,7 +504,7 @@ function CommunityRecipeCard({ recipe }: { recipe: CommunityRecipe }) {
   const [commentText, setCommentText] = useState("");
 
   const likeMutation = useMutation({
-    mutationFn: () => api.post(`/api/recipes/likes?recipeId=${recipe.id}`),
+    mutationFn: () => api.post<{ liked: boolean; likeCount: number }>(`/api/recipes/likes?recipeId=${recipe.id}`),
     onSuccess: (data: { liked: boolean; likeCount: number }) => {
       qc.invalidateQueries({ queryKey: ["community-recipes"] });
       toast.success(data.liked ? "Recipe liked!" : "Like removed");
