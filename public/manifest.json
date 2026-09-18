@@ -1,0 +1,42 @@
+{
+  "name": "NutriFlow — Secure Nutrition Tracker",
+  "short_name": "NutriFlow",
+  "description": "Track calories, macros, exercise, water, weight & fasting. Secure, reliable, offline-ready nutrition PWA.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7faf8",
+  "theme_color": "#1f9d6b",
+  "categories": ["health", "fitness", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/?view=dashboard",
+      "description": "Today's summary"
+    },
+    {
+      "name": "Food Diary",
+      "url": "/?view=diary",
+      "description": "Log food"
+    },
+    {
+      "name": "Add Food",
+      "url": "/?view=diary&action=add",
+      "description": "Quick log"
+    }
+  ]
+}
