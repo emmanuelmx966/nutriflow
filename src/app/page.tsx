@@ -5,11 +5,9 @@ import { AuthScreen } from "@/components/app/auth-screen";
 import { AppShell } from "@/components/app/app-shell";
 import { DashboardView } from "@/components/app/views/dashboard";
 import { DiaryView } from "@/components/app/views/diary";
-import { ExerciseView } from "@/components/app/views/exercise";
-import { MealPlanView } from "@/components/app/views/meal-plan";
-import { RecipesView } from "@/components/app/views/recipes";
-import { InsightsView } from "@/components/app/views/insights";
 import { ProgressView } from "@/components/app/views/progress";
+import { PlanView } from "@/components/app/views/plan";
+import { ReportsView } from "@/components/app/views/reports";
 import { ProfileView } from "@/components/app/views/profile";
 import { useAppStore } from "@/store/app-store";
 import { Leaf } from "lucide-react";
@@ -24,7 +22,7 @@ export default function Home() {
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-500/20 animate-pulse">
           <Leaf className="h-7 w-7 text-white" />
         </div>
-        <p className="mt-4 text-sm text-muted-foreground">Loading NutriFlow…</p>
+        <p className="mt-4 text-sm text-muted-foreground">Cargando NutriFlow…</p>
       </div>
     );
   }
@@ -37,11 +35,9 @@ export default function Home() {
     <AppShell>
       {view === "dashboard" && <DashboardView />}
       {view === "diary" && <DiaryView />}
-      {view === "exercise" && <ExerciseView />}
-      {view === "mealplan" && <MealPlanView />}
-      {view === "recipes" && <RecipesView />}
-      {view === "insights" && <InsightsView />}
       {view === "progress" && <ProgressView />}
+      {view === "plan" && <PlanView />}
+      {view === "reports" && <ReportsView />}
       {view === "profile" && <ProfileView />}
     </AppShell>
   );

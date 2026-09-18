@@ -4,11 +4,9 @@ import { todayLocalString, addDays, toLocalDateString } from "@/lib/utils/date";
 export type ViewName =
   | "dashboard"
   | "diary"
-  | "exercise"
-  | "mealplan"
-  | "recipes"
   | "progress"
-  | "insights"
+  | "plan"
+  | "reports"
   | "profile";
 
 interface AppState {

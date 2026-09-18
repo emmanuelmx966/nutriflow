@@ -2,7 +2,18 @@
 
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
-import { LayoutDashboard, BookOpen, Dumbbell, TrendingUp, User, LogOut, Moon, Sun, Leaf, ChefHat, CalendarDays, Scale } from "lucide-react";
+import {
+  LayoutDashboard,
+  BookOpen,
+  TrendingUp,
+  CalendarDays,
+  FileText,
+  User,
+  LogOut,
+  Moon,
+  Sun,
+  Leaf,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -25,11 +36,11 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: "dashboard", label: "Today", icon: LayoutDashboard },
-  { id: "diary", label: "Food", icon: BookOpen },
-  { id: "mealplan", label: "Plan", icon: CalendarDays },
-  { id: "insights", label: "Insights", icon: TrendingUp },
-  { id: "profile", label: "Profile", icon: User },
+  { id: "dashboard", label: "Hoy", icon: LayoutDashboard },
+  { id: "diary", label: "Diario", icon: BookOpen },
+  { id: "progress", label: "Progreso", icon: TrendingUp },
+  { id: "plan", label: "Plan", icon: CalendarDays },
+  { id: "reports", label: "Reportes", icon: FileText },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -66,14 +77,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               size="icon"
               className="h-9 w-9"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              aria-label="Toggle theme"
+              aria-label="Cambiar tema"
             >
               <Sun className="h-4 w-4 dark:hidden" />
               <Moon className="h-4 w-4 hidden dark:block" />
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring" aria-label="Account menu">
+                <button
+                  className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring"
+                  aria-label="Menú de cuenta"
+                >
                   <Avatar className="h-8 w-8 border border-border">
                     <AvatarFallback className="bg-emerald-100 text-emerald-700 text-xs font-semibold dark:bg-emerald-900/40 dark:text-emerald-300">
                       {initials}
@@ -89,39 +103,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setView("exercise")}>
-                  <Dumbbell className="mr-2 h-4 w-4" /> Exercise log
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setView("progress")}>
-                  <Scale className="mr-2 h-4 w-4" /> Weight tracking
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setView("recipes")}>
-                  <ChefHat className="mr-2 h-4 w-4" /> My recipes
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.location.href = "/api/export?format=json";
-                  }}
-                >
-                  <Leaf className="mr-2 h-4 w-4" /> Export my data (JSON)
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.location.href = "/api/export?format=csv";
-                  }}
-                >
-                  <Leaf className="mr-2 h-4 w-4" /> Export my data (CSV)
+                <DropdownMenuItem onClick={() => setView("profile")}>
+                  <User className="mr-2 h-4 w-4" /> Mi perfil
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive focus:text-destructive"
                   onClick={() => {
                     signOut({ redirect: false });
-                    toast.success("Signed out");
+                    toast.success("Sesión cerrada");
                   }}
                 >
-                  <LogOut className="mr-2 h-4 w-4" /> Sign out
+                  <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
