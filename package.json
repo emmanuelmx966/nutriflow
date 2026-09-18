@@ -1,6 +1,17 @@
 {
   "name": "nutriflow",
   "version": "0.2.1",
+  "description": "PWA privada para seguimiento nutricional — calorías, macros, peso, agua, ayuno y ejercicio",
+"author": "Emmanuel Caballero De La Rosa (https://github.com/emmanuelmx966)",
+"license": "MIT",
+"repository": {
+  "type": "git",
+  "url": "https://github.com/emmanuelmx966/nutriflow.git"
+},
+"homepage": "https://github.com/emmanuelmx966/nutriflow#readme",
+"bugs": {
+  "url": "https://github.com/emmanuelmx966/nutriflow/issues"
+},
   "private": true,
   "scripts": {
   "dev": "next dev -p 3000",
