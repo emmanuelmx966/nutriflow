@@ -197,7 +197,7 @@ bun prisma studio    # Abrir GUI de Prisma Studio
 
 ## Autor
 
-**Emmanuel Caballer De La Rosa** ([@emmanuelmx966](https://github.com/emmanuelmx966))
+**Emmanuel Caballero De La Rosa** ([@emmanuelmx966](https://github.com/emmanuelmx966))
 
 Construido con cariño para alguien que necesitaba una forma más simple y privada de llevar su seguimiento nutricional.
 
